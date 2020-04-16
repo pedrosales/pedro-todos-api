@@ -5,10 +5,10 @@ using Todo.Domain.Commands.Contracts;
 
 namespace Todo.Domain.Commands
 {
-    public class MarkTodoAsUndone : Notifiable, ICommand
+    public class MarkTodoAsUndoneCommand : Notifiable, ICommand
     {
-        public MarkTodoAsUndone() { }
-        public MarkTodoAsUndone(Guid id, string user)
+        public MarkTodoAsUndoneCommand() { }
+        public MarkTodoAsUndoneCommand(Guid id, string user)
         {
             Id = id;
             User = user;
