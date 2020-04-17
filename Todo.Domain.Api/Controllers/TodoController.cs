@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Todo.Domain.Commands;
 using Todo.Domain.Entities;
@@ -10,6 +12,7 @@ namespace Todo.Api.Controllers
 {
     [ApiController]
     [Route("v1/todos")]
+    [Authorize]
     public class TodoController : ControllerBase
     {
         [HttpPost]
@@ -19,7 +22,7 @@ namespace Todo.Api.Controllers
             [FromServices]TodoHandler handler
         )
         {
-            command.User = "pedroivo";
+            command.User = User.Claims.FirstOrDefault(x => x.Type == "user_id")?.Value;
             var result = (GenericCommandResult)handler.Handle(command);
             return result;
         }
@@ -31,7 +34,7 @@ namespace Todo.Api.Controllers
             [FromServices]TodoHandler handler
         )
         {
-            command.User = "pedroivo";
+            command.User = User.Claims.FirstOrDefault(x => x.Type == "user_id")?.Value;
             return (GenericCommandResult)handler.Handle(command);
         }
 
@@ -42,7 +45,7 @@ namespace Todo.Api.Controllers
             [FromServices]TodoHandler handler
         )
         {
-            command.User = "pedroivo";
+            command.User = User.Claims.FirstOrDefault(x => x.Type == "user_id")?.Value;
             return (GenericCommandResult)handler.Handle(command);
         }
 
@@ -53,7 +56,7 @@ namespace Todo.Api.Controllers
             [FromServices]TodoHandler handler
         )
         {
-            command.User = "pedroivo";
+            command.User = User.Claims.FirstOrDefault(x => x.Type == "user_id")?.Value;
             return (GenericCommandResult)handler.Handle(command);
         }
 
@@ -63,7 +66,8 @@ namespace Todo.Api.Controllers
             [FromServices]ITodoRepository repository
         )
         {
-            return repository.GetAll("pedroivo");
+            var user = User.Claims.FirstOrDefault(x => x.Type == "user_id")?.Value;
+            return repository.GetAll(user);
         }
 
         [HttpGet]
@@ -72,7 +76,8 @@ namespace Todo.Api.Controllers
             [FromServices]ITodoRepository repository
         )
         {
-            return repository.GetAllDone("pedroivo");
+            var user = User.Claims.FirstOrDefault(x => x.Type == "user_id")?.Value;
+            return repository.GetAllDone(user);
         }
 
         [HttpGet]
@@ -81,7 +86,8 @@ namespace Todo.Api.Controllers
             [FromServices]ITodoRepository repository
         )
         {
-            return repository.GetAllUndone("pedroivo");
+            var user = User.Claims.FirstOrDefault(x => x.Type == "user_id")?.Value;
+            return repository.GetAllUndone(user);
         }
 
         [HttpGet]
@@ -90,7 +96,8 @@ namespace Todo.Api.Controllers
             [FromServices]ITodoRepository repository
         )
         {
-            return repository.GetByPeriod("pedroivo", DateTime.Now.Date, true);
+            var user = User.Claims.FirstOrDefault(x => x.Type == "user_id")?.Value;
+            return repository.GetByPeriod(user, DateTime.Now.Date, true);
         }
 
         [HttpGet]
@@ -99,7 +106,8 @@ namespace Todo.Api.Controllers
             [FromServices]ITodoRepository repository
         )
         {
-            return repository.GetByPeriod("pedroivo", DateTime.Now.Date, false);
+            var user = User.Claims.FirstOrDefault(x => x.Type == "user_id")?.Value;
+            return repository.GetByPeriod(user, DateTime.Now.Date, false);
         }
 
         [HttpGet]
@@ -108,7 +116,8 @@ namespace Todo.Api.Controllers
             [FromServices]ITodoRepository repository
         )
         {
-            return repository.GetByPeriod("pedroivo", DateTime.Now.Date.AddDays(1), true);
+            var user = User.Claims.FirstOrDefault(x => x.Type == "user_id")?.Value;
+            return repository.GetByPeriod(user, DateTime.Now.Date.AddDays(1), true);
         }
 
         [HttpGet]
@@ -117,7 +126,8 @@ namespace Todo.Api.Controllers
             [FromServices]ITodoRepository repository
         )
         {
-            return repository.GetByPeriod("pedroivo", DateTime.Now.Date.AddDays(1), false);
+            var user = User.Claims.FirstOrDefault(x => x.Type == "user_id")?.Value;
+            return repository.GetByPeriod(user, DateTime.Now.Date.AddDays(1), false);
         }
     }
 }
